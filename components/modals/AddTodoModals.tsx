@@ -5,10 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createTodo } from "@/utils/api";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  FormDataForTodo,
-  TodoSchema,
-} from "@/types/todoTypes";
+import { FormDataForTodo, TodoSchema } from "@/types/todoTypes";
 import FormFieldForTodo from "../FormFieldForTodo";
 
 const AddTodoModal = () => {
@@ -20,9 +17,9 @@ const AddTodoModal = () => {
   const {
     handleSubmit,
     formState: { errors },
-    setError,
+    // setError,
     register,
-    reset
+    reset,
   } = useForm({ resolver: zodResolver(TodoSchema) });
 
   // ✅ React Query Mutation
@@ -39,7 +36,7 @@ const AddTodoModal = () => {
       });
 
       // Reset form & close modal
-      reset()
+      reset();
       closeModal();
     },
     onError: (error, variables, onMutateResult, context) => {
@@ -52,12 +49,18 @@ const AddTodoModal = () => {
     mutateAsync({ todo, userId, completed });
   };
 
+  const handleCancel = () => {
+    closeModal();
+    setErrorMessage("");
+    reset();
+  };
+
   if (!isModalOpen) return null;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
       <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md md:max-w-lg">
-       <h2 className="text-2xl font-bold mb-6 text-center">Add New Todo</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Add New Todo</h2>
 
         <form onSubmit={handleSubmit(submit)} className="space-y-5">
           <label className="block text-base font-medium mb-1">Todo</label>
@@ -89,17 +92,15 @@ const AddTodoModal = () => {
               name="completed"
               type="checkbox"
             />
-              <label htmlFor="completed" className="text-sm font-medium">Completed</label>
+            <label htmlFor="completed" className="text-sm font-medium">
+              Completed
+            </label>
           </div>
 
           <div className="flex justify-end gap-2 mt-4">
             <button
               type="button"
-              onClick={() => {
-                closeModal();
-                setErrorMessage("");
-                reset()
-              }}
+              onClick={handleCancel}
               className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
             >
               Cancel
