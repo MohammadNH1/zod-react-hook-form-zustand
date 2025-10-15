@@ -1,4 +1,3 @@
-import { FormFieldProps } from "@/types/userTypes";
 import {userRegistrationFormDataProps} from "@/types/userRegistrationTypes"
 import React from 'react'
 
